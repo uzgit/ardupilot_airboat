@@ -2,6 +2,67 @@
 
 #include <AP_RangeFinder/RangeFinder_Backend.h>
 
+void Rover::read_intelliducer_data(void)
+{
+
+        union
+        {
+                uint8_t bytes[4];
+                float float_value;
+        } converter;
+
+        int arduino_i2c_bus = 1;
+        int arduino_device_address = 7;
+
+        int local_buffer_length = 9;
+        uint8_t local_buffer[9];
+
+        float values[2];        //store water_depth in values[0] and water_temperature in values[1]
+
+        AP_HAL::OwnPtr<AP_HAL::I2CDevice> arduino = hal.i2c_mgr->get_device(arduino_i2c_bus, arduino_device_address);   //create a pointer to the arduino on i2c bus 1, with device address 7
+
+        if( arduino->transfer(nullptr, 0, local_buffer, local_buffer_length) )  //request <local_buffer_length> number of data bytes from the arduino
+        {
+
+                int i;
+                for(i = 0; i < 2; i ++)
+                {
+                        int ii;
+                        for(ii = 0; ii < 4; ii ++)
+                        {
+                                converter.bytes[ii] = local_buffer[4*i + ii + 1];
+                        }
+
+                        values[i] = converter.float_value;
+                }
+
+                read_flag = local_buffer[0];
+                switch(read_flag)
+                {
+                        case 0:         //no data is ready
+                                break;
+                        case 7:         //only water temperature is ready
+                                water_temperature = (int32_t)values[1];
+                                water_temperature_read_flag = true;
+                                break;
+                        case 63:        //only water depth is ready
+                                water_depth = (int32_t)values[0];
+                                water_depth_read_flag = true;
+                                break;
+                        case 255:       //both water depth and water temperature are ready
+                                water_depth = (int32_t)values[0];
+                                water_temperature = values[1];
+
+                                water_depth_read_flag = true;
+                                water_temperature_read_flag = true;
+                                break;
+                        default:
+                                break;
+                }
+
+        }
+
+}
 
 
 // initialise compass

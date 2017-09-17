@@ -5,8 +5,41 @@
 
 #include <AP_RangeFinder/RangeFinder_Backend.h>
 
+void Rover::send_water_depth(void)
+{
+//	gcs().send_text(MAV_SEVERITY_INFO, "water_depth: %d", water_depth);
+//	gcs().send_text(MAV_SEVERITY_INFO, "water_temperature: %d", water_temperature);
+//	gcs().send_message(MSG_WATER_DEPTH);
+//	gcs().try_send_message(MSG_WATER_DEPTH);
+    mavlink_msg_water_depth_send(
+        gcs()._chan,
+        millis(),
+        water_depth,
+        current_loc.lat,             // in 1E7 degrees
+        current_loc.lng,             // in 1E7 degrees
+        current_loc.alt             // meters above sea level
+        );
+}
+
+void Rover::send_water_depth(mavlink_channel_t chan)
+{
+    //static inline void mavlink_msg_water_depth_send(mavlink_channel_t chan, uint64_t time_usec, uint32_t water_depth, int32_t latitude, int32_t longitude, int32_t altitude_amsl)
+    mavlink_msg_water_depth_send(
+        chan,
+        millis(),
+        water_depth,
+        current_loc.lat,             // in 1E7 degrees
+        current_loc.lng,             // in 1E7 degrees
+        current_loc.alt             // meters above sea level
+        );
+
+
+//    rover.send_message(MSG_WATER_DEPTH);
+}
+
 void Rover::send_heartbeat(mavlink_channel_t chan)
 {
+
     uint8_t base_mode = MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
     uint8_t system_status = MAV_STATE_ACTIVE;
 
@@ -405,6 +438,13 @@ bool GCS_MAVLINK_Rover::try_send_message(enum ap_message id)
     case MSG_BATTERY_STATUS:
         send_battery_status(rover.battery);
         break;
+
+    case MSG_WATER_DEPTH:
+	rover.send_water_depth(chan);
+	break;
+
+    case MSG_WATER_TEMPERATURE:
+	break;
 
     default:
         return GCS_MAVLINK::try_send_message(id);

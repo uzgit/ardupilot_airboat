@@ -62,6 +62,9 @@ const AP_Scheduler::Task Rover::scheduler_tasks[] = {
     SCHED_TASK(gcs_retry_deferred,     50,   1000),
     SCHED_TASK(gcs_update,             50,   1700),
     SCHED_TASK(gcs_data_stream_send,   50,   3000),
+
+    SCHED_TASK(read_intelliducer_data, 10,    500),
+
     SCHED_TASK(read_control_switch,     7,   1000),
     SCHED_TASK(read_aux_switch,        10,    100),
     SCHED_TASK(read_battery,           10,   1000),
@@ -81,6 +84,7 @@ const AP_Scheduler::Task Rover::scheduler_tasks[] = {
     SCHED_TASK(stats_update,            1,    100),
     SCHED_TASK(crash_check,            10,   1000),
     SCHED_TASK(cruise_learn_update,    50,     50),
+    SCHED_TASK(send_water_depth,       10,    500),
 #if ADVANCED_FAILSAFE == ENABLED
     SCHED_TASK(afs_fs_check,           10,    100),
 #endif
