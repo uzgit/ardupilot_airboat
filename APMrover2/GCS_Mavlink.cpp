@@ -7,30 +7,36 @@
 
 void Rover::send_water_depth(void)
 {
-//	gcs().send_text(MAV_SEVERITY_INFO, "water_depth: %d", water_depth);
-//	gcs().send_text(MAV_SEVERITY_INFO, "water_temperature: %d", water_temperature);
 	gcs().send_message(MSG_WATER_DEPTH);
-//	gcs().try_send_message(MSG_WATER_DEPTH);
 }
 
 void Rover::send_water_depth(mavlink_channel_t chan)
 {
-	gcs().send_text(MAV_SEVERITY_INFO, "LOL WE ARE IN THE TRY_SEND_MESSAGE FUNCTION LOL");	
-	gcs().send_text(MAV_SEVERITY_INFO, "water_depth: %d", water_depth);	
-	gcs().send_text(MAV_SEVERITY_INFO, "water_temperature: %d", water_temperature);	
+	mavlink_msg_water_depth_send(
+	        chan,
+	        millis(),
+	        water_depth,
+	        current_loc.lat,             // in 1E7 degrees
+	        current_loc.lng,             // in 1E7 degrees
+	        current_loc.alt             // meters above sea level
+        	);
+}
 
-    //static inline void mavlink_msg_water_depth_send(mavlink_channel_t chan, uint64_t time_usec, uint32_t water_depth, int32_t latitude, int32_t longitude, int32_t altitude_amsl)
-    mavlink_msg_water_depth_send(
-        chan,
-        millis(),
-        water_depth,
-        current_loc.lat,             // in 1E7 degrees
-        current_loc.lng,             // in 1E7 degrees
-        current_loc.alt             // meters above sea level
-        );
+void Rover::send_water_temperature(void)
+{
+	gcs().send_message(MSG_WATER_TEMPERATURE);
+}
 
-
-//    rover.send_message(MSG_WATER_DEPTH);
+void Rover::send_water_temperature(mavlink_channel_t chan)
+{
+	mavlink_msg_water_temperature_send(
+		chan,
+		millis(),
+		water_temperature,
+		current_loc.lat,
+		current_loc.lng,
+		current_loc.alt
+		);
 }
 
 void Rover::send_heartbeat(mavlink_channel_t chan)
@@ -440,6 +446,7 @@ bool GCS_MAVLINK_Rover::try_send_message(enum ap_message id)
 	break;
 
     case MSG_WATER_TEMPERATURE:
+	rover.send_water_temperature(chan);
 	break;
 
     default:

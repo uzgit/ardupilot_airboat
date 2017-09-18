@@ -42,15 +42,15 @@ void Rover::read_intelliducer_data(void)
                         case 0:         //no data is ready
                                 break;
                         case 7:         //only water temperature is ready
-                                water_temperature = (int32_t)values[1];
+                                water_temperature = values[1];
                                 water_temperature_read_flag = true;
                                 break;
                         case 63:        //only water depth is ready
-                                water_depth = (int32_t)values[0];
+                                water_depth = values[0];
                                 water_depth_read_flag = true;
                                 break;
                         case 255:       //both water depth and water temperature are ready
-                                water_depth = (int32_t)values[0];
+                                water_depth = values[0];
                                 water_temperature = values[1];
 
                                 water_depth_read_flag = true;

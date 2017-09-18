@@ -579,9 +579,9 @@ private:
     void print_enabled(bool b);
 
     int read_flag = false;
-    int16_t water_depth = -999;
+    float water_depth = -999;
     bool water_depth_read_flag = true;
-    int16_t water_temperature = -999;
+    float water_temperature = -999;
     bool water_temperature_read_flag = true;
 
 public:
@@ -596,10 +596,11 @@ public:
     uint8_t mavlink_motor_test_start(mavlink_channel_t chan, uint8_t motor_seq, uint8_t throttle_type, int16_t throttle_value, float timeout_sec);
     void motor_test_stop();
 
+    void read_intelliducer_data(void);
     void send_water_depth(void);
     void send_water_depth(mavlink_channel_t chan);
-    void read_intelliducer_data(void);
-
+    void send_water_temperature(void);
+    void send_water_temperature(mavlink_channel_t chan);
 };
 
 extern const AP_HAL::HAL& hal;
