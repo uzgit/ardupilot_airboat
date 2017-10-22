@@ -16,9 +16,9 @@ void Rover::send_water_depth(mavlink_channel_t chan)
 	        chan,
 	        millis(),
 	        water_depth,
-	        current_loc.lat,             // in 1E7 degrees
-	        current_loc.lng,             // in 1E7 degrees
-	        current_loc.alt             // meters above sea level
+	        (float)current_loc.lat / 1e7,             // in 1E7 degrees
+	        (float)current_loc.lng / 1e7,             // in 1E7 degrees
+	        (float)current_loc.alt             // meters above sea level
         	);
 }
 
@@ -33,9 +33,9 @@ void Rover::send_water_temperature(mavlink_channel_t chan)
 		chan,
 		millis(),
 		water_temperature,
-		current_loc.lat,
-		current_loc.lng,
-		current_loc.alt
+		(float)current_loc.lat / 1e7,
+		(float)current_loc.lng / 1e7,
+		(float)current_loc.alt
 		);
 }
 
