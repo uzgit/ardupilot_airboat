@@ -7,12 +7,21 @@
 
 void Rover::send_watt_knot(void)
 {
-	gcs().send_text(MAV_SEVERITY_INFO, "we are here");
 	gcs().send_message(MSG_WATT_KNOT);
 }
 
 void Rover::send_watt_knot(mavlink_channel_t chan)
 {
+/*
+	mavlink_msg_watt_knot_send(
+		chan,
+		millis(),
+		2.0,
+		4.0,
+		8.0,
+		16.0
+		);
+*/
 	mavlink_msg_watt_knot_send(
 		chan,
 		millis(),
@@ -468,6 +477,7 @@ bool GCS_MAVLINK_Rover::try_send_message(enum ap_message id)
 	break;
 
     case MSG_WATT_KNOT:
+	rover.send_watt_knot(chan);
 	break;
 
     default:
