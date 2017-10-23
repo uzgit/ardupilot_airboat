@@ -86,6 +86,7 @@ const AP_Scheduler::Task Rover::scheduler_tasks[] = {
     SCHED_TASK(cruise_learn_update,    50,     50),
     SCHED_TASK(send_water_depth,       10,    500),
     SCHED_TASK(send_water_temperature, 10,    500),
+    SCHED_TASK(send_watt_knot,	       10,    500),
 #if ADVANCED_FAILSAFE == ENABLED
     SCHED_TASK(afs_fs_check,           10,    100),
 #endif

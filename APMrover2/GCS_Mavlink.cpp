@@ -5,6 +5,24 @@
 
 #include <AP_RangeFinder/RangeFinder_Backend.h>
 
+void Rover::send_watt_knot(void)
+{
+	gcs().send_text(MAV_SEVERITY_INFO, "we are here");
+	gcs().send_message(MSG_WATT_KNOT);
+}
+
+void Rover::send_watt_knot(mavlink_channel_t chan)
+{
+	mavlink_msg_watt_knot_send(
+		chan,
+		millis(),
+		(float)battery.voltage(),
+		(float)battery.current_amps(),
+		ahrs.groundspeed(),
+		gps.ground_course()
+		);
+}
+
 void Rover::send_water_depth(void)
 {
 	gcs().send_message(MSG_WATER_DEPTH);
@@ -447,6 +465,9 @@ bool GCS_MAVLINK_Rover::try_send_message(enum ap_message id)
 
     case MSG_WATER_TEMPERATURE:
 	rover.send_water_temperature(chan);
+	break;
+
+    case MSG_WATT_KNOT:
 	break;
 
     default:

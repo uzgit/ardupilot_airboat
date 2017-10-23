@@ -83,6 +83,7 @@ enum ap_message {
     MSG_NAMED_FLOAT,
     MSG_WATER_DEPTH,
     MSG_WATER_TEMPERATURE,
+    MSG_WATT_KNOT,
     MSG_LAST // MSG_LAST must be the last entry in this enum
 };
 

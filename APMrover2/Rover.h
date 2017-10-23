@@ -601,6 +601,8 @@ public:
     void send_water_depth(mavlink_channel_t chan);
     void send_water_temperature(void);
     void send_water_temperature(mavlink_channel_t chan);
+    void send_watt_knot(void);
+    void send_watt_knot(mavlink_channel_t chan);
 };
 
 extern const AP_HAL::HAL& hal;
